@@ -3,548 +3,475 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PEMBAYARAN FKOM FK 23 - UNISMUH</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="icon" href="https://placehold.co/32x32/007AFF/FFFFFF?text=UM" type="image/x-icon">
+    <title>Kalkulator Gizi Praktikum</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary-color: #007AFF;
-            --success-color: #34C759;
-            --background-color: #FFFFFF;
-            --text-primary-color: #1c1c1e;
-            --text-secondary-color: #636366;
-            --separator-color: #E5E5EA;
-            --transition-speed: 0.25s;
-        }
-
-        /* Basic Reset & Font */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-        
-        html {
-            scroll-behavior: smooth;
-        }
-
         body {
-            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            line-height: 1.6;
-            background-color: var(--background-color);
-            color: var(--text-secondary-color);
-            font-size: 14px;
-            overflow-x: hidden;
+            font-family: 'Inter', sans-serif;
+            background-color: #f9fafb; /* Light gray background */
+        }
+        /* Custom styles untuk font-mono yang lebih rapi */
+        .calc-step {
+            font-family: 'Consolas', 'Monaco', 'monospace';
+            font-size: 0.9em;
+            background-color: #f3f4f6;
+            padding: 12px;
+            border-radius: 6px;
+            color: #1f2937;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
         }
         
-        main {
-            padding-top: 52px; /* Disesuaikan dengan tinggi header baru */
+        /* Memastikan scroll-padding untuk header sticky */
+        html {
+            /* Tinggi header (h-16 = 4rem) + progress bar (h-1 = 0.25rem) + margin-bottom (mb-8 = 2rem) */
+            scroll-padding-top: calc(4.25rem + 2rem); 
         }
 
-        /* Header */
-        header {
-            position: sticky;
-            top: 0;
-            width: 100%;
-            z-index: 100;
-            background-color: rgba(255, 255, 255, 0.85); /* Transparansi dikurangi */
-            backdrop-filter: blur(20px); /* Efek blur diperkuat */
-            -webkit-backdrop-filter: blur(20px); /* Efek blur untuk Safari */
-            border-bottom: 1px solid var(--separator-color);
+        /* Style untuk radio button yang dicek */
+        input[type="radio"]:checked + label {
+            border-color: #2563eb; /* blue-600 */
+            box-shadow: 0 0 0 2px #dbeafe; /* blue-100 ring */
         }
 
-        .header-content {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 6px 20px; /* Padding vertikal dikurangi */
-            height: 52px; /* Tinggi header dikurangi */
-        }
-
-        header h1 {
-            font-weight: 600;
-            font-size: 16px;
-            line-height: 1.2;
-            color: var(--text-primary-color);
-            margin: 0;
-        }
-        
-        header .subtitle {
-            font-weight: 400;
-            font-size: 12px;
-            color: var(--text-secondary-color);
-        }
-
-        /* Content Sections */
-        .content-section {
-            padding: 20px; /* Padding dikurangi */
-            border-bottom: 1px solid var(--separator-color);
-        }
-        
-        main .content-section:first-of-type {
-            padding-top: 12px; /* Padding atas dikurangi lagi */
-        }
-
-        .content-section:last-child {
+        /* Menghapus garis pemisah di item hasil terakhir */
+        #practicum-results > div:last-child {
             border-bottom: none;
         }
-        
-        .section-title {
-            color: var(--text-primary-color);
-            margin-bottom: 16px; /* Margin dikurangi */
-            font-weight: 600;
-            font-size: 17px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .section-title .section-icon {
-            width: 22px;
-            height: 22px;
-            color: var(--primary-color);
-        }
-        
-        .icon-stroke {
-            stroke-width: 2;
-            fill: none;
-            stroke: currentColor;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
 
-        /* Info Block */
-        .info-block {
-            margin-bottom: 16px; /* Margin dikurangi */
-        }
-        
-        .info-block:last-child {
-            margin-bottom: 0;
-        }
-        
-        .info-block h3 {
-            color: var(--text-primary-color);
-            margin-bottom: 8px;
-            font-weight: 500;
-            font-size: 15px;
-        }
-        
-        .info-block p {
-            margin-bottom: 8px;
-            font-size: 13px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .info-block p strong {
-            color: var(--text-secondary-color);
-            font-weight: 400;
-            white-space: nowrap;
-        }
-
-        .info-value {
-            color: var(--text-primary-color);
-            font-weight: 500;
-            text-align: right;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        
-        .info-block code {
-            background-color: #f0f0f0;
-            padding: 2px 6px;
-            border-radius: 5px;
-            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
-            font-size: 12px;
-        }
-
-        /* Copy Button */
-        .copy-btn {
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 4px;
-            display: inline-flex;
-            align-items: center;
-            border-radius: 50%;
-            transition: background-color var(--transition-speed) ease;
-        }
-        .copy-btn:hover {
-            background-color: #f0f0f0;
-        }
-        .copy-btn svg {
-            width: 18px;
-            height: 18px;
-            color: var(--text-secondary-color);
-            transition: color var(--transition-speed) ease;
-        }
-        .copy-btn.copied svg {
-            color: var(--success-color);
-        }
-
-        /* Contact Section */
-        .contact-section p {
-            font-size: 13px;
-            margin-bottom: 16px; /* Margin dikurangi */
-        }
-
-        .btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            padding: 10px 16px;
-            text-decoration: none;
-            border-radius: 10px;
-            font-weight: 500;
-            font-size: 14px;
-            text-align: center;
-            transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease, transform 0.1s ease;
-            border: 1.5px solid transparent;
-            cursor: pointer;
-        }
-        .btn:active {
-            transform: scale(0.98);
-        }
-        .btn .btn-icon {
-            width: 20px;
-            height: 20px;
-            margin-right: 8px;
-        }
-        
-        .btn-whatsapp {
-            background-color: transparent;
-            color: var(--success-color);
-            border-color: var(--success-color);
-        }
-        .btn-whatsapp .btn-icon {
-            color: var(--success-color);
-        }
-        .btn-whatsapp:hover {
-            background-color: rgba(52, 199, 89, 0.1);
-        }
-
-        /* Semester Access */
-        .semester-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 16px;
-        }
-
-        .semester-card {
-            background-color: #F7F7F7;
-            border-radius: 12px;
-            padding: 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        
-        .semester-card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            gap: 8px;
-        }
-
-        .semester-card h3 {
-            color: var(--text-primary-color);
-            font-weight: 600;
-            font-size: 15px;
-            margin: 0;
-        }
-        
-        .semester-status {
-            font-size: 11px;
-            color: var(--text-secondary-color);
-            background-color: #EFEFF4;
-            padding: 3px 8px;
-            border-radius: 10px;
-            font-weight: 500;
-            text-align: right;
-            flex-shrink: 0;
-        }
-
-        .links {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-        
-        .btn-link {
-            background-color: var(--background-color);
-            color: var(--primary-color);
-            font-weight: 500;
-            font-size: 13px;
-            padding: 8px 10px;
-            border: 1px solid #E5E5EA;
-        }
-        
-        .btn-link .btn-icon {
-            color: var(--primary-color);
-            fill: var(--primary-color);
-            width: 18px;
-            height: 18px;
-        }
-        .btn-link:hover {
-            background-color: #f0f0f0;
-        }
-
-        /* Footer */
-        footer {
-            color: var(--text-secondary-color);
-            text-align: center;
-            padding: 16px 20px; /* Padding vertikal dikurangi */
-            background-color: #F7F7F7;
-        }
-        footer p {
-            font-size: 11px;
-            margin: 0; /* Memastikan tidak ada margin tambahan */
-        }
     </style>
 </head>
-<body>
-    <header>
-        <div class="header-content">
-            <h1>PEMBAYARAN FKOM FK 23</h1>
-            <p class="subtitle">Universitas Muhammadiyah Makassar</p>
-        </div>
-    </header>
+<body class="text-gray-800">
 
-    <main>
-        <section class="content-section">
-            <h2 class="section-title">
-                <svg class="section-icon icon-stroke" viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2z"></path><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-                Panduan Pembayaran
-            </h2>
+    <!-- [PERUBAHAN] Padding utama dipindahkan ke sini untuk tampilan edge-to-edge -->
+    <div id="app" class="min-h-screen px-4 sm:px-6 py-8">
+        
+        <!-- ====================================================== -->
+        <!-- [BARU] Halaman 1: Input Form                           -->
+        <!-- ====================================================== -->
+        <div id="page-input">
+            <header class="mb-8">
+                <h1 class="text-3xl md:text-4xl font-bold text-center text-blue-700">Kalkulator Gizi</h1>
+                <p class="text-lg text-center text-gray-600 mt-2">Asisten Laporan Praktikum Gizi Anda</p>
+            </header>
+
+            <section id="input-section" class="mb-12">
+                <form id="gizi-form">
+                    <h2 class="text-2xl font-semibold text-gray-900 mb-6 border-b pb-3">Data Pasien</h2>
+                    
+                    <!-- Data Subjektif -->
+                    <fieldset class="mb-6">
+                        <legend class="text-lg font-medium text-gray-700 mb-3">1. Data Subjektif</legend>
+                        <div class="space-y-4">
+                            <div>
+                                <label for="umur" class="block text-sm font-medium text-gray-700">Umur (Tahun)</label>
+                                <input type="number" id="umur" name="umur" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Contoh: 20" required>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Jenis Kelamin</label>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <!-- Opsi Laki-laki -->
+                                    <label for="gender-laki" class="flex items-center p-3 w-full border border-gray-300 rounded-md shadow-sm cursor-pointer hover:border-blue-500 transition-all bg-white">
+                                        <input type="radio" id="gender-laki" name="gender" value="laki-laki" class="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500" required>
+                                        <span class="ml-3 block text-sm font-medium text-gray-700">Laki-laki</span>
+                                    </label>
+                                    <!-- Opsi Perempuan -->
+                                    <label for="gender-perempuan" class="flex items-center p-3 w-full border border-gray-300 rounded-md shadow-sm cursor-pointer hover:border-blue-500 transition-all bg-white">
+                                        <input type="radio" id="gender-perempuan" name="gender" value="perempuan" class="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500" required>
+                                        <span class="ml-3 block text-sm font-medium text-gray-700">Perempuan</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div id="ree-formula-display" class="hidden mt-3 p-3 bg-blue-50 border border-blue-200 rounded-md transition-all">
+                                <p class="text-sm font-medium text-blue-700">Rumus REE (Harris-Benedict) yang akan digunakan:</p>
+                                <p id="ree-formula-text" class="text-sm text-blue-900 font-mono mt-1"></p>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <!-- Data Objektif -->
+                    <fieldset>
+                        <legend class="text-lg font-medium text-gray-700 mb-3">2. Data Objektif</legend>
+                        <div class="space-y-4">
+                            <div>
+                                <label for="bb" class="block text-sm font-medium text-gray-700">Berat Badan (BB) (kg)</label>
+                                <input type="number" id="bb" name="bb" step="0.01" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Contoh: 55.5" required>
+                            </div>
+                            <div>
+                                <label for="tb" class="block text-sm font-medium text-gray-700">Tinggi Badan (TB) (cm)</label>
+                                <input type="number" id="tb" name="tb" step="0.01" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Contoh: 160" required>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <!-- Tombol Hitung -->
+                    <div class="mt-8">
+                        <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-lg text-lg font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200">
+                            Hitung Semua Praktikum
+                        </button>
+                    </div>
+                </form>
+                <!-- Pesan Error -->
+                <div id="error-message" class="hidden mt-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-md"></div>
+            </section>
+        </div> <!-- Akhir dari #page-input -->
+
+        
+        <!-- ====================================================== -->
+        <!-- [BARU] Halaman 2: Hasil Perhitungan                    -->
+        <!-- ====================================================== -->
+        <div id="page-results" class="hidden">
+            <!-- [PERUBAHAN] Header Scrollspy diubah menjadi Header Halaman Hasil -->
+            <div id="results-header" class="hidden sticky top-0 bg-white/95 backdrop-blur-sm shadow-md z-10 mb-8 transition-all duration-300">
+                <div class="px-4 sm:px-6"> <!-- Padding disamakan dengan #app -->
+                    <div class="flex justify-between items-center h-16">
+                        
+                        <!-- [BARU] Tombol Kembali -->
+                        <button id="back-button" class="flex items-center gap-1.5 text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+                            </svg>
+                            Kembali
+                        </button>
+                        
+                        <!-- Sisi Kanan: Status Scrollspy -->
+                        <div class="text-right">
+                            <span class="text-sm text-gray-500 block">Saat ini melihat:</span>
+                            <span id="current-practicum-name" class="text-lg font-bold text-gray-900 transition-colors duration-300">
+                                <!-- Nama praktikum diisi oleh JS -->
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Indikator Progress Bar -->
+                <div id="scroll-progress-bar" class="h-1 bg-blue-600 transition-all duration-300" style="width: 0%;"></div>
+            </div>
             
-            <div class="info-block">
-                <h3>Informasi Rekening</h3>
-                <p><strong>Iuran per Mahasiswa</strong> <span class="info-value">Rp 750.000</span></p>
-                <p><strong>Bank</strong> <span class="info-value">BSI (Bank Syariah Indonesia)</span></p>
-                <p><strong>Atas Nama</strong> <span class="info-value">FKOM FK UNISMUH</span></p>
-                <p><strong>No. Rekening</strong> 
-                    <span class="info-value" id="rekeningNo">7776667115
-                        <button class="copy-btn" onclick="copyToClipboard('rekeningNo', this)">
-                            <svg id="copyIcon" class="icon-stroke" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                            <svg id="copiedIcon" style="display:none;" class="icon-stroke" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-                        </button>
-                    </span>
-                </p>
+            <!-- Hasil -->
+            <div id="practicum-results" class="grid grid-cols-1 gap-0">
+                <!-- Hasil akan di-generate oleh JavaScript di sini -->
             </div>
+        </div> <!-- Akhir dari #page-results -->
 
-            <div class="info-block">
-                <h3>Format Folder Unggah</h3>
-                 <p><strong>Format</strong> <span class="info-value"><code>5 NIM terakhir_Nama Lengkap</code></span></p>
-                <p><strong>Contoh</strong> 
-                    <span class="info-value" id="folderFormatExample">07523_Agung Nugraha
-                         <button class="copy-btn" onclick="copyToClipboard('folderFormatExample', this)">
-                            <svg id="copyIcon" class="icon-stroke" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                            <svg id="copiedIcon" style="display:none;" class="icon-stroke" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-                        </button>
-                    </span>
-                </p>
+    </div> <!-- Akhir dari #app -->
+
+    <!-- ====================================================== -->
+    <!-- [BARU] Modal Konfirmasi                                -->
+    <!-- ====================================================== -->
+    <div id="modal-container" class="hidden fixed inset-0 bg-gray-900 bg-opacity-60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-md p-6">
+            <h3 class="text-xl font-semibold text-gray-900 mb-3">Konfirmasi Kembali</h3>
+            <p class="text-gray-600 mb-6">
+                Anda yakin ingin kembali ke halaman input? Semua data hasil perhitungan ini akan hilang dan perlu dihitung ulang.
+            </p>
+            <div class="flex justify-end gap-4">
+                <button id="modal-cancel" class="px-4 py-2 rounded-md text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-300">
+                    Batal
+                </button>
+                <button id="modal-confirm" class="px-4 py-2 rounded-md text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    Ya, Kembali
+                </button>
             </div>
-
-            <!-- Catatan Khusus Semester 5 -->
-            <div class="info-block" id="semester-5-note" style="margin-top: 16px; background-color: #f7f7f7; padding: 14px; border-radius: 10px;">
-                <h3 style="display: flex; align-items: center; gap: 8px;">
-                    <svg class="section-icon icon-stroke" viewBox="0 0 24 24" style="width: 20px; height: 20px; color: var(--primary-color);"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
-                    Catatan Khusus Semester 5
-                </h3>
-                <p style="display: block; text-align: left; line-height: 1.5; font-size: 13px; margin-bottom: 0;">
-                    Bukti pembayaran dikumpulkan melalui tautan Google Formulir. Silakan klik tombol "Kirim Bukti" di kartu Semester 5 pada bagian "Akses Data per Semester" di bawah.
-                </p>
-            </div>
-            <!-- Akhir Catatan Khusus Semester 5 -->
-
-        </section>
-
-        <section class="content-section contact-section">
-            <h2 class="section-title">
-                <svg class="section-icon icon-stroke" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
-                Dukungan & Kendala
-            </h2>
-            <p>Jika ada pertanyaan atau kendala terkait pembayaran, hubungi Agung Nugraha dengan melampirkan bukti bayar dan jelaskan kendala Anda.</p>
-            <a href="https://wa.me/62895804705557" target="_blank" class="btn btn-whatsapp">
-                <svg class="btn-icon icon-stroke" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-                Hubungi via WhatsApp
-            </a>
-        </section>
-
-        <section class="content-section">
-            <h2 class="section-title">
-                <svg class="section-icon icon-stroke" viewBox="0 0 24 24"><path d="M3 7v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-7l-2-2H5a2 2 0 0 0-2 2z"></path></svg>
-                Akses Data per Semester
-            </h2>
-            <div class="semester-grid">
-                
-                <div class="semester-card">
-                    <div class="semester-card-header">
-                        <h3>Semester 1</h3>
-                        <div class="semester-status">Update Rekap: 24 Mei 2025</div>
-                    </div>
-                    <div class="links">
-                        <a href="https://drive.google.com/drive/folders/1Q_VsHhRB-kFrxfsVgNbsHl7Y2_qUIYlI?usp=sharing" target="_blank" class="btn btn-link">
-                            <svg class="btn-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/></svg>
-                            Google Drive
-                        </a>
-                        <a href="https://docs.google.com/spreadsheets/d/1uKRt_pLqUd5qle2S3CWJpE43kUrKfViC/edit?gid=2145836649#gid=2145836649" target="_blank" class="btn btn-link">
-                             <svg class="btn-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM8 17H6v-2h2v2zm0-4H6v-2h2v2zm0-4H6V7h2v2zm10 8h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V7h2v2zm-5 8h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V7h2v2z"/></svg>
-                            Lihat Rekapan
-                        </a>
-                    </div>
-                </div>
-
-                <div class="semester-card">
-                     <div class="semester-card-header">
-                        <h3>Semester 2</h3>
-                        <div class="semester-status">Update Rekap: 24 Mei 2025</div>
-                    </div>
-                    <div class="links">
-                        <a href="https://drive.google.com/drive/folders/10if2c2FTSadL0TjKqYie7SXh4eATZPYC" target="_blank" class="btn btn-link">
-                            <svg class="btn-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/></svg>
-                            Google Drive
-                        </a>
-                        <a href="https://docs.google.com/spreadsheets/d/1jXw9RBFtctaiwC2sU5bLlOJK0QUyOLBm/edit?gid=1383407518#gid=1383407518" target="_blank" class="btn btn-link">
-                            <svg class="btn-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM8 17H6v-2h2v2zm0-4H6v-2h2v2zm0-4H6V7h2v2zm10 8h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V7h2v2zm-5 8h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V7h2v2z"/></svg>
-                            Lihat Rekapan
-                        </a>
-                    </div>
-                </div>
-
-                <div class="semester-card">
-                    <div class="semester-card-header">
-                        <h3>Semester 3</h3>
-                        <div class="semester-status">Update Rekap: 24 Mei 2025</div>
-                    </div>
-                    <div class="links">
-                        <a href="https://drive.google.com/drive/folders/12wKhEeHZ83TXLgSZA6_l8dNtyipEAjA7" target="_blank" class="btn btn-link">
-                             <svg class="btn-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/></svg>
-                            Google Drive
-                        </a>
-                        <a href="https://docs.google.com/spreadsheets/d/1BScXXK6FpQKhaD-Ph6UqrAJ02G6cIXiE/edit?gid=201605048#gid=201605048" target="_blank" class="btn btn-link">
-                             <svg class="btn-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM8 17H6v-2h2v2zm0-4H6v-2h2v2zm0-4H6V7h2v2zm10 8h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V7h2v2zm-5 8h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V7h2v2z"/></svg>
-                            Lihat Rekapan
-                        </a>
-                    </div>
-                </div>
-
-                <div class="semester-card">
-                    <div class="semester-card-header">
-                        <h3>Semester 4</h3>
-                        <div class="semester-status">Update Rekap: 24 Mei 2025</div>
-                    </div>
-                    <div class="links">
-                        <a href="https://drive.google.com/drive/folders/1BzU7pnWkiRr-oolx_yUvLTIHeMToZZnL" target="_blank" class="btn btn-link">
-                             <svg class="btn-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/></svg>
-                            Google Drive
-                        </a>
-                        <a href="https://docs.google.com/spreadsheets/d/1GY6ctqTLTDNARXgHKy6diqm_dCTarhe5/edit?gid=1727109246#gid=1727109246" target="_blank" class="btn btn-link">
-                             <svg class="btn-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM8 17H6v-2h2v2zm0-4H6v-2h2v2zm0-4H6V7h2v2zm10 8h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V7h2v2zm-5 8h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V7h2v2z"/></svg>
-                            Lihat Rekapan
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Kartu Semester 5 Baru -->
-                <div class="semester-card">
-                    <div class="semester-card-header">
-                        <h3>Semester 5</h3>
-                        <div class="semester-status">Update Rekap: 1 Nov 2025</div>
-                    </div>
-                    <div class="links">
-                        <a href="https://docs.google.com/forms/d/e/1FAIpQLScduk2wFYqfGO0m5nJ2neWjXGMbAxm7ayHrhWZ6ZE_Sgtywwg/viewform" target="_blank" class="btn btn-link">
-                             <svg class="btn-icon icon-stroke" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 11l3 3l8-8"></path><path d="M20 12v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h9"></path></svg>
-                            Kirim Bukti
-                        </a>
-                        <a href="https://docs.google.com/spreadsheets/d/1msobuwR-erPyxt1wY7uFFA8UIeo5A0Et/edit?gid=148449313#gid=148449313" target="_blank" class="btn btn-link">
-                             <svg class="btn-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM8 17H6v-2h2v2zm0-4H6v-2h2v2zm0-4H6V7h2v2zm10 8h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V7h2v2zm-5 8h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V7h2v2z"/></svg>
-                            Lihat Rekapan
-                        </a>
-                    </div>
-                </div>
-                <!-- Akhir Kartu Semester 5 Baru -->
-
-            </div>
-        </section>
-    </main>
-
-    <footer>
-        <p>© <span id="currentYear"></span> FKOM FK UNISMUH. All Rights Reserved.</p>
-    </footer>
+        </div>
+    </div>
 
     <script>
-        function copyToClipboard(elementId, buttonElement) {
-            // Target the span, then get its text content, ignoring the button inside
-            const parentSpan = document.getElementById(elementId);
-            let textToCopy = '';
+        // Variabel global untuk IntersectionObserver
+        let observer;
+
+        // Data Praktikum
+        const practicums = [
+            { id: "p1", name: "1. Diet Lambung", colorClass: "text-blue-700", bgClass: "bg-blue-700", af: 1.2, if: 1.3, macros: { carb: 0.60, protein: 0.15, fat: 0.25 } },
+            { id: "p2", name: "2. Diet Rendah Sisa", colorClass: "text-green-700", bgClass: "bg-green-700", af: 1.2, if: 1.4, macros: { carb: 0.60, protein: 0.15, fat: 0.25 } },
+            { id: "p3", name: "3. Diet Tinggi Serat", colorClass: "text-purple-700", bgClass: "bg-purple-700", af: 1.3, if: 1.3, macros: { carb: 0.60, protein: 0.15, fat: 0.25 } },
+            { id: "p4", name: "4. Diet Penyakit Hati", colorClass: "text-amber-700", bgClass: "bg-amber-700", af: 1.2, if: 1.4, macros: { carb: 0.60, protein: 0.15, fat: 0.25 } },
+            { id: "p5", name: "5. Diet Rendah Lemak", colorClass: "text-rose-700", bgClass: "bg-rose-700", af: 1.2, if: 1.3, macros: { carb: 0.60, protein: 0.20, fat: 0.20 } }
+        ];
+
+        // --- [BARU] Ambil elemen-elemen kunci ---
+        const pageInput = document.getElementById('page-input');
+        const pageResults = document.getElementById('page-results');
+        const resultsHeader = document.getElementById('results-header');
+        const backButton = document.getElementById('back-button');
+        const modalContainer = document.getElementById('modal-container');
+        const modalCancel = document.getElementById('modal-cancel');
+        const modalConfirm = document.getElementById('modal-confirm');
+
+        // Helper function to format 2 decimal places
+        function formatNum(num) {
+            return num.toFixed(2);
+        }
+
+        // [DISEMPURNAKAN] Fungsi untuk setup IntersectionObserver (Scrollspy)
+        function setupScrollspy() {
+            const currentPracticumName = document.getElementById('current-practicum-name');
+            const progressBar = document.getElementById('scroll-progress-bar');
+            // [PERUBAHAN] Tidak perlu remove 'hidden' di sini, krn sudah di-handle di submit
             
-            // Iterate over child nodes to get only text and code nodes
-            for (const node of parentSpan.childNodes) {
-                if (node.nodeType === Node.TEXT_NODE || node.tagName === 'CODE') {
-                    textToCopy += node.textContent.trim();
-                }
+            // Hapus observer lama jika ada (saat menghitung ulang)
+            if (observer) {
+                observer.disconnect();
             }
-            textToCopy = textToCopy.trim(); // Clean up whitespace
 
-            const copyIcon = buttonElement.querySelector('#copyIcon');
-            const copiedIcon = buttonElement.querySelector('#copiedIcon');
+            const options = {
+                root: null, // Menggunakan viewport
+                rootMargin: "-100px 0px -50% 0px", 
+                threshold: 0 
+            };
 
-            if (!textToCopy) return; // Do nothing if no text was found
+            observer = new IntersectionObserver((entries) => {
+                const intersectingEntry = [...entries].reverse().find(e => e.isIntersecting);
 
-            // Modern clipboard API
-            navigator.clipboard.writeText(textToCopy).then(() => {
-                showCopiedState(buttonElement, copyIcon, copiedIcon);
-            }).catch(err => {
-                console.error('Gagal menyalin: ', err);
-                // Fallback for older browsers or insecure contexts
-                try {
-                    const textArea = document.createElement("textarea");
-                    textArea.value = textToCopy;
-                    textArea.style.position = "fixed"; // Make it invisible
-                    textArea.style.opacity = "0";
-                    document.body.appendChild(textArea);
-                    textArea.focus();
-                    textArea.select();
-                    document.execCommand('copy');
-                    document.body.removeChild(textArea);
-                    showCopiedState(buttonElement, copyIcon, copiedIcon);
-                } catch (e) {
-                    // If fallback also fails
-                    alert('Gagal menyalin. Silakan salin secara manual.');
+                if (intersectingEntry) {
+                    const practicumId = intersectingEntry.target.id;
+                    const practicum = practicums.find(p => p.id === practicumId);
+                    const practicumIndex = practicums.findIndex(p => p.id === practicumId);
+                    
+                    if (practicum) {
+                        currentPracticumName.textContent = practicum.name;
+                        currentPracticumName.className = `text-lg font-bold ${practicum.colorClass} transition-colors duration-300`;
+                        
+                        const progressPercent = ((practicumIndex + 1) / practicums.length) * 100;
+                        progressBar.style.width = `${progressPercent}%`;
+                        
+                        practicums.forEach(p => progressBar.classList.remove(p.bgClass));
+                        progressBar.classList.add(practicum.bgClass);
+                    }
                 }
-            });
+            }, options);
+
+            const targets = document.querySelectorAll('#practicum-results > div[id^="p"]');
+            targets.forEach(target => observer.observe(target));
         }
 
-        function showCopiedState(buttonElement, copyIcon, copiedIcon) {
-            if (copyIcon) copyIcon.style.display = 'none';
-            if (copiedIcon) copiedIcon.style.display = 'inline-block';
-            buttonElement.classList.add('copied');
+        
+        // --- Logika untuk menampilkan rumus REE ---
+        const genderLakiRadio = document.getElementById('gender-laki');
+        const genderPerempuanRadio = document.getElementById('gender-perempuan');
+        const reeDisplay = document.getElementById('ree-formula-display');
+        const reeText = document.getElementById('ree-formula-text');
+
+        const formula_laki = "KEB = 66 + (13,7 x BB) + (5 x TB) - (6,8 x U)";
+        const formula_perempuan = "KEB = 655 + (9,6 x BB) + (1,8 x TB) – (4,7 x U)";
+
+        function updateFormulaDisplay() {
+            if (genderLakiRadio.checked) {
+                reeText.textContent = formula_laki;
+                reeDisplay.classList.remove('hidden');
+            } else if (genderPerempuanRadio.checked) {
+                reeText.textContent = formula_perempuan;
+                reeDisplay.classList.remove('hidden');
+            } else {
+                reeDisplay.classList.add('hidden');
+            }
+        }
+        genderLakiRadio.addEventListener('change', updateFormulaDisplay);
+        genderPerempuanRadio.addEventListener('change', updateFormulaDisplay);
+        
+
+        // --- [MODIFIKASI] Event listener for form submission ---
+        document.getElementById('gizi-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            // 1. Get Input Values
+            const umur = parseFloat(document.getElementById('umur').value);
+            const checkedGender = document.querySelector('input[name="gender"]:checked');
+            const gender = checkedGender ? checkedGender.value : null;
+            const bb = parseFloat(document.getElementById('bb').value);
+            const tb = parseFloat(document.getElementById('tb').value);
+            const errorMessage = document.getElementById('error-message');
+
+            // 2. Validasi Input
+            if (isNaN(umur) || isNaN(bb) || isNaN(tb) || !gender) {
+                errorMessage.textContent = 'Harap isi semua data dengan angka yang valid.';
+                errorMessage.classList.remove('hidden');
+                return;
+            }
+            errorMessage.classList.add('hidden');
+
+            // 3. Perhitungan Bersama
             
-            // Reset after 1.5 seconds
-            setTimeout(() => {
-                if (copyIcon) copyIcon.style.display = 'inline-block';
-                if (copiedIcon) copiedIcon.style.display = 'none';
-                buttonElement.classList.remove('copied');
-            }, 1500);
-        }
+            // IMT
+            const tb_m = tb / 100;
+            const imt = bb / (tb_m * tb_m);
+            const imt_calc_string = (colorClass) => `IMT = BB / (TB (m))²\nIMT = ${bb} kg / (${tb_m} m)²\nIMT = ${bb} / ${formatNum(tb_m * tb_m)}\nIMT = <span class="font-bold ${colorClass}">${formatNum(imt)}</span>`;
+            
+            let imt_status = '';
+            if (imt < 17.0) imt_status = 'Sangat Kurus';
+            else if (imt >= 17.0 && imt < 18.5) imt_status = 'Kurus';
+            else if (imt >= 18.5 && imt < 25.1) imt_status = 'Normal';
+            else if (imt >= 25.1 && imt < 27.1) imt_status = 'Gemuk';
+            else imt_status = 'Sangat Gemuk (Obesitas)';
 
-        // Set current year in footer
-        document.getElementById('currentYear').textContent = new Date().getFullYear();
+            // KEB
+            let keb = 0;
+            let keb_calc_string_func; // Ubah jadi fungsi
+            if (gender === 'laki-laki') {
+                const val1_l = 13.7 * bb;
+                const val2_l = 5 * tb;
+                const val3_l = 6.8 * umur;
+                const sum_positive_l = 66 + val1_l + val2_l;
+                keb = sum_positive_l - val3_l;
+
+                keb_calc_string_func = (colorClass) => `KEB = 66 + (13,7 x BB) + (5 x TB) - (6,8 x U)\n` +
+                                  `KEB = 66 + (13,7 x ${bb}) + (5 x ${tb}) - (6,8 x ${umur})\n` + 
+                                  `KEB = 66 + (${formatNum(val1_l)}) + (${formatNum(val2_l)}) - (${formatNum(val3_l)})\n` +
+                                  `KEB = (${formatNum(sum_positive_l)}) - ${formatNum(val3_l)}\n` +
+                                  `KEB = <span class="font-bold ${colorClass}">${formatNum(keb)} kkal</span>`;
+            } else { // Perempuan
+                const val1_p = 9.6 * bb;
+                const val2_p = 1.8 * tb;
+                const val3_p = 4.7 * umur;
+                const sum_positive_p = 655 + val1_p + val2_p;
+                keb = sum_positive_p - val3_p;
+                
+                keb_calc_string_func = (colorClass) => `KEB = 655 + (9,6 x BB) + (1,8 x TB) – (4,7 x U)\n` +
+                                  `KEB = 655 + (9,6 x ${bb}) + (1,8 x ${tb}) – (4,7 x ${umur})\n` + 
+                                  `KEB = 655 + (${formatNum(val1_p)}) + (${formatNum(val2_p)}) - (${formatNum(val3_p)})\n` +
+                                  `KEB = (${formatNum(sum_positive_p)}) - ${formatNum(val3_p)}\n` +
+                                  `KEB = <span class="font-bold ${colorClass}">${formatNum(keb)} kkal</span>`;
+            }
+
+            // 4. Perhitungan per Praktikum
+            let practicumHtml = '';
+            practicums.forEach(p => {
+                // KET
+                const ket = keb * p.af * p.if;
+                const ket_calc_string = `KET = KEB x AF x IF\nKET = ${formatNum(keb)} x ${p.af} x ${p.if}\nKET = <span class="font-bold ${p.colorClass}">${formatNum(ket)} kkal</span>`;
+                
+                // Makronutrien
+                const carb_g = (p.macros.carb * ket) / 4;
+                const prot_g = (p.macros.protein * ket) / 4;
+                const fat_g = (p.macros.fat * ket) / 9;
+
+                const carb_calc_string = `Karbohidrat = (${p.macros.carb * 100}% x KET) : 4\nKarbohidrat = (${p.macros.carb} x ${formatNum(ket)}) : 4\nKarbohidrat = ${formatNum(p.macros.carb * ket)} : 4\nKarbohidrat = <span class="font-bold ${p.colorClass}">${formatNum(carb_g)} g</span>`;
+                const prot_calc_string = `Protein = (${p.macros.protein * 100}% x KET) : 4\nProtein = (${p.macros.protein} x ${formatNum(ket)}) : 4\nProtein = ${formatNum(p.macros.protein * ket)} : 4\nProtein = <span class="font-bold ${p.colorClass}">${formatNum(prot_g)} g</span>`;
+                const fat_calc_string = `Lemak = (${p.macros.fat * 100}% x KET) : 9\nLemak = (${p.macros.fat} x ${formatNum(ket)}) : 9\nLemak = ${formatNum(p.macros.fat * ket)} : 9\nLemak = <span class="font-bold ${p.colorClass}">${formatNum(fat_g)} g</span>`;
+
+                // Batas Adekuat
+                const carb_min = carb_g - (0.10 * carb_g);
+                const carb_max = carb_g + (0.10 * carb_g);
+                const prot_min = prot_g - (0.10 * prot_g);
+                const prot_max = prot_g + (0.10 * prot_g);
+                const fat_min = fat_g - (0.10 * fat_g);
+                const fat_max = fat_g + (0.10 * fat_g);
+
+                const carb_10_percent = 0.10 * carb_g;
+                const prot_10_percent = 0.10 * prot_g;
+                const fat_10_percent = 0.10 * fat_g;
+
+                const carb_ba_calc = `Max = Karbohidrat + (10% x Karbohidrat)\nMax = ${formatNum(carb_g)} + ${formatNum(carb_10_percent)}\nMax = <span class="font-bold ${p.colorClass}">${formatNum(carb_max)} g</span>\n\nMin = Karbohidrat - (10% x Karbohidrat)\nMin = ${formatNum(carb_g)} - ${formatNum(carb_10_percent)}\nMin = <span class="font-bold ${p.colorClass}">${formatNum(carb_min)} g</span>`;
+                const prot_ba_calc = `Max = Protein + (10% x Protein)\nMax = ${formatNum(prot_g)} + ${formatNum(prot_10_percent)}\nMax = <span class="font-bold ${p.colorClass}">${formatNum(prot_max)} g</span>\n\nMin = Protein - (10% x Protein)\nMin = ${formatNum(prot_g)} - ${formatNum(prot_10_percent)}\nMin = <span class="font-bold ${p.colorClass}">${formatNum(prot_min)} g</span>`;
+                const fat_ba_calc = `Max = Lemak + (10% x Lemak)\nMax = ${formatNum(fat_g)} + ${formatNum(fat_10_percent)}\nMax = <span class="font-bold ${p.colorClass}">${formatNum(fat_max)} g</span>\n\nMin = Lemak - (10% x Lemak)\nMin = ${formatNum(fat_g)} - ${formatNum(fat_10_percent)}\nMin = <span class="font-bold ${p.colorClass}">${formatNum(fat_min)} g</span>`;
+
+                practicumHtml += `
+                    <div class="py-8 border-b border-gray-200" id="${p.id}">
+                        <h2 class="text-2xl font-bold ${p.colorClass} mb-4">${p.name}</h2>
+                        <div class="mb-6">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-3">1. Diagnosis Gizi (IMT)</h3>
+                            <div class="calc-step">${imt_calc_string(p.colorClass)}</div>
+                            <p class="mt-2 text-lg font-semibold">Status Gizi: <span class="${p.colorClass} font-bold">${imt_status}</span></p>
+                        </div>
+                        <div class="mb-6">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-3">2. Kebutuhan Energi Basal (KEB/REE)</h3>
+                            <div class="calc-step">${keb_calc_string_func(p.colorClass)}</div>
+                        </div>
+                        <div class="mb-4 space-y-1">
+                            <p class="font-medium text-gray-700">Faktor Aktivitas (AF): <span class="${p.colorClass} font-bold">${p.af}</span></p>
+                            <p class="font-medium text-gray-700">Faktor Stres (IF): <span class="${p.colorClass} font-bold">${p.if}</span></p>
+                        </div>
+                        <div class="mb-5">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-2">3. Kebutuhan Energi Total (KET)</h3>
+                            <div class="calc-step">${ket_calc_string}</div>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-800 mb-3">4. Kebutuhan Makronutrien</h3>
+                        <div class="space-y-5">
+                            <div>
+                                <h4 class="text-md font-semibold text-gray-700">a. Karbohidrat (${p.macros.carb * 100}%)</h4>
+                                <h5 class="font-medium mt-2 mb-1 text-sm text-gray-600">Proses Perhitungan:</h5>
+                                <div class="calc-step">${carb_calc_string}</div>
+                                <h5 class="font-medium mt-3 mb-1 text-sm text-gray-600">Batas Adekuat:</h5>
+                                <div class="calc-step">${carb_ba_calc}</div>
+                            </div>
+                            <div>
+                                <h4 class="text-md font-semibold text-gray-700">b. Protein (${p.macros.protein * 100}%)</h4>
+                                <h5 class="font-medium mt-2 mb-1 text-sm text-gray-600">Proses Perhitungan:</h5>
+                                <div class="calc-step">${prot_calc_string}</div>
+                                <h5 class="font-medium mt-3 mb-1 text-sm text-gray-600">Batas Adekuat:</h5>
+                                <div class="calc-step">${prot_ba_calc}</div>
+                            </div>
+                            <div>
+                                <h4 class="text-md font-semibold text-gray-700">c. Lemak (${p.macros.fat * 100}%)</h4>
+                                <h5 class="font-medium mt-2 mb-1 text-sm text-gray-600">Proses Perhitungan:</h5>
+                                <div class="calc-step">${fat_calc_string}</div>
+                                <h5 class="font-medium mt-3 mb-1 text-sm text-gray-600">Batas Adekuat:</h5>
+                                <div class="calc-step">${fat_ba_calc}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            // 5. Tampilkan Hasil
+            document.getElementById('practicum-results').innerHTML = practicumHtml;
+            
+            // 6. [BARU] Pindah Halaman
+            pageInput.classList.add('hidden');
+            pageResults.classList.remove('hidden');
+            resultsHeader.classList.remove('hidden');
+
+            // 7. Panggil fungsi setupScrollspy setelah HTML di-render
+            setupScrollspy();
+
+            // 8. [BARU] Scroll ke atas halaman baru
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+
+        // --- [BARU] Logika Modal dan Tombol Kembali ---
+
+        // Tampilkan modal saat tombol "Kembali" diklik
+        backButton.addEventListener('click', () => {
+            modalContainer.classList.remove('hidden');
+        });
+
+        // Sembunyikan modal saat tombol "Batal" diklik
+        modalCancel.addEventListener('click', () => {
+            modalContainer.classList.add('hidden');
+        });
+
+        // Aksi saat tombol "Ya, Kembali" diklik
+        modalConfirm.addEventListener('click', () => {
+            // 1. Sembunyikan modal
+            modalContainer.classList.add('hidden');
+            
+            // 2. Sembunyikan halaman hasil & headernya
+            pageResults.classList.add('hidden');
+            resultsHeader.classList.add('hidden');
+
+            // 3. Tampilkan halaman input
+            pageInput.classList.remove('hidden');
+
+            // 4. Scroll ke atas
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // 5. Hapus hasil perhitungan (opsional, tapi baik untuk kebersihan)
+            document.getElementById('practicum-results').innerHTML = '';
+
+            // 6. Reset scrollspy observer
+            if (observer) {
+                observer.disconnect();
+                observer = null;
+            }
+        });
+
     </script>
 </body>
 </html>
-
-
-
-
-
 
