@@ -47,11 +47,11 @@
 </head>
 <body class="text-gray-800">
 
-    <!-- [PERUBAHAN] Padding utama dipindahkan ke sini untuk tampilan edge-to-edge -->
+    <!-- Padding utama -->
     <div id="app" class="min-h-screen px-4 sm:px-6 py-8">
         
         <!-- ====================================================== -->
-        <!-- [BARU] Halaman 1: Input Form                           -->
+        <!-- Halaman 1: Input Form                                -->
         <!-- ====================================================== -->
         <div id="page-input">
             <header class="mb-8">
@@ -124,15 +124,15 @@
 
         
         <!-- ====================================================== -->
-        <!-- [BARU] Halaman 2: Hasil Perhitungan                    -->
+        <!-- Halaman 2: Hasil Perhitungan                         -->
         <!-- ====================================================== -->
         <div id="page-results" class="hidden">
-            <!-- [PERUBAHAN] Header Scrollspy diubah menjadi Header Halaman Hasil -->
+            <!-- Header Halaman Hasil -->
             <div id="results-header" class="hidden sticky top-0 bg-white/95 backdrop-blur-sm shadow-md z-10 mb-8 transition-all duration-300">
                 <div class="px-4 sm:px-6"> <!-- Padding disamakan dengan #app -->
                     <div class="flex justify-between items-center h-16">
                         
-                        <!-- [BARU] Tombol Kembali -->
+                        <!-- Tombol Kembali -->
                         <button id="back-button" class="flex items-center gap-1.5 text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
@@ -152,6 +152,33 @@
                 <!-- Indikator Progress Bar -->
                 <div id="scroll-progress-bar" class="h-1 bg-blue-600 transition-all duration-300" style="width: 0%;"></div>
             </div>
+
+            <!-- [BARU] Ringkasan Data Pasien -->
+            <section id="patient-summary-section" class="mb-8">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-6 border-b pb-3">Ringkasan Data Pasien</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <!-- Umur -->
+                    <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                        <p class="text-sm font-medium text-gray-500">Umur</p>
+                        <p id="summary-umur" class="text-xl font-bold text-gray-900">- Tahun</p>
+                    </div>
+                    <!-- Jenis Kelamin -->
+                    <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                        <p class="text-sm font-medium text-gray-500">Jenis Kelamin</p>
+                        <p id="summary-gender" class="text-xl font-bold text-gray-900">-</p>
+                    </div>
+                    <!-- Berat Badan -->
+                    <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                        <p class="text-sm font-medium text-gray-500">Berat Badan (BB)</p>
+                        <p id="summary-bb" class="text-xl font-bold text-gray-900">- kg</p>
+                    </div>
+                    <!-- Tinggi Badan -->
+                    <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                        <p class="text-sm font-medium text-gray-500">Tinggi Badan (TB)</p>
+                        <p id="summary-tb" class="text-xl font-bold text-gray-900">- cm</p>
+                    </div>
+                </div>
+            </section>
             
             <!-- Hasil -->
             <div id="practicum-results" class="grid grid-cols-1 gap-0">
@@ -162,7 +189,7 @@
     </div> <!-- Akhir dari #app -->
 
     <!-- ====================================================== -->
-    <!-- [BARU] Modal Konfirmasi                                -->
+    <!-- Modal Konfirmasi                                     -->
     <!-- ====================================================== -->
     <div id="modal-container" class="hidden fixed inset-0 bg-gray-900 bg-opacity-60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-lg shadow-xl w-full max-w-md p-6">
@@ -194,7 +221,7 @@
             { id: "p5", name: "5. Diet Rendah Lemak", colorClass: "text-rose-700", bgClass: "bg-rose-700", af: 1.2, if: 1.3, macros: { carb: 0.60, protein: 0.20, fat: 0.20 } }
         ];
 
-        // --- [BARU] Ambil elemen-elemen kunci ---
+        // Ambil elemen-elemen kunci
         const pageInput = document.getElementById('page-input');
         const pageResults = document.getElementById('page-results');
         const resultsHeader = document.getElementById('results-header');
@@ -203,18 +230,17 @@
         const modalCancel = document.getElementById('modal-cancel');
         const modalConfirm = document.getElementById('modal-confirm');
 
-        // Helper function to format 2 decimal places
+        // [MODIFIKASI] Helper function to format up to 2 decimal places (menghapus .00 or .X0)
         function formatNum(num) {
-            return num.toFixed(2);
+            const fixedString = num.toFixed(2);
+            return parseFloat(fixedString);
         }
 
-        // [DISEMPURNAKAN] Fungsi untuk setup IntersectionObserver (Scrollspy)
+        // Fungsi untuk setup IntersectionObserver (Scrollspy)
         function setupScrollspy() {
             const currentPracticumName = document.getElementById('current-practicum-name');
             const progressBar = document.getElementById('scroll-progress-bar');
-            // [PERUBAHAN] Tidak perlu remove 'hidden' di sini, krn sudah di-handle di submit
             
-            // Hapus observer lama jika ada (saat menghitung ulang)
             if (observer) {
                 observer.disconnect();
             }
@@ -275,7 +301,7 @@
         genderPerempuanRadio.addEventListener('change', updateFormulaDisplay);
         
 
-        // --- [MODIFIKASI] Event listener for form submission ---
+        // --- Event listener for form submission ---
         document.getElementById('gizi-form').addEventListener('submit', function(event) {
             event.preventDefault();
 
@@ -295,12 +321,21 @@
             }
             errorMessage.classList.add('hidden');
 
+            // --- [BARU] Populate Patient Summary ---
+            document.getElementById('summary-umur').textContent = `${formatNum(umur)} Tahun`;
+            // Capitalize gender
+            const displayGender = gender.charAt(0).toUpperCase() + gender.slice(1);
+            document.getElementById('summary-gender').textContent = displayGender;
+            document.getElementById('summary-bb').textContent = `${formatNum(bb)} kg`;
+            document.getElementById('summary-tb').textContent = `${formatNum(tb)} cm`;
+            // --- Akhir dari blok baru ---
+
             // 3. Perhitungan Bersama
             
             // IMT
             const tb_m = tb / 100;
             const imt = bb / (tb_m * tb_m);
-            const imt_calc_string = (colorClass) => `IMT = BB / (TB (m))²\nIMT = ${bb} kg / (${tb_m} m)²\nIMT = ${bb} / ${formatNum(tb_m * tb_m)}\nIMT = <span class="font-bold ${colorClass}">${formatNum(imt)}</span>`;
+            const imt_calc_string = (colorClass) => `IMT = BB / (TB (m))²\nIMT = ${formatNum(bb)} kg / (${formatNum(tb_m)} m)²\nIMT = ${formatNum(bb)} / ${formatNum(tb_m * tb_m)}\nIMT = <span class="font-bold ${colorClass}">${formatNum(imt)}</span>`;
             
             let imt_status = '';
             if (imt < 17.0) imt_status = 'Sangat Kurus';
@@ -320,7 +355,7 @@
                 keb = sum_positive_l - val3_l;
 
                 keb_calc_string_func = (colorClass) => `KEB = 66 + (13,7 x BB) + (5 x TB) - (6,8 x U)\n` +
-                                  `KEB = 66 + (13,7 x ${bb}) + (5 x ${tb}) - (6,8 x ${umur})\n` + 
+                                  `KEB = 66 + (13,7 x ${formatNum(bb)}) + (5 x ${formatNum(tb)}) - (6,8 x ${formatNum(umur)})\n` + 
                                   `KEB = 66 + (${formatNum(val1_l)}) + (${formatNum(val2_l)}) - (${formatNum(val3_l)})\n` +
                                   `KEB = (${formatNum(sum_positive_l)}) - ${formatNum(val3_l)}\n` +
                                   `KEB = <span class="font-bold ${colorClass}">${formatNum(keb)} kkal</span>`;
@@ -332,7 +367,7 @@
                 keb = sum_positive_p - val3_p;
                 
                 keb_calc_string_func = (colorClass) => `KEB = 655 + (9,6 x BB) + (1,8 x TB) – (4,7 x U)\n` +
-                                  `KEB = 655 + (9,6 x ${bb}) + (1,8 x ${tb}) – (4,7 x ${umur})\n` + 
+                                  `KEB = 655 + (9,6 x ${formatNum(bb)}) + (1,8 x ${formatNum(tb)}) – (4,7 x ${formatNum(umur)})\n` + 
                                   `KEB = 655 + (${formatNum(val1_p)}) + (${formatNum(val2_p)}) - (${formatNum(val3_p)})\n` +
                                   `KEB = (${formatNum(sum_positive_p)}) - ${formatNum(val3_p)}\n` +
                                   `KEB = <span class="font-bold ${colorClass}">${formatNum(keb)} kkal</span>`;
@@ -343,16 +378,16 @@
             practicums.forEach(p => {
                 // KET
                 const ket = keb * p.af * p.if;
-                const ket_calc_string = `KET = KEB x AF x IF\nKET = ${formatNum(keb)} x ${p.af} x ${p.if}\nKET = <span class="font-bold ${p.colorClass}">${formatNum(ket)} kkal</span>`;
+                const ket_calc_string = `KET = KEB x AF x IF\nKET = ${formatNum(keb)} x ${formatNum(p.af)} x ${formatNum(p.if)}\nKET = <span class="font-bold ${p.colorClass}">${formatNum(ket)} kkal</span>`;
                 
                 // Makronutrien
                 const carb_g = (p.macros.carb * ket) / 4;
                 const prot_g = (p.macros.protein * ket) / 4;
                 const fat_g = (p.macros.fat * ket) / 9;
 
-                const carb_calc_string = `Karbohidrat = (${p.macros.carb * 100}% x KET) : 4\nKarbohidrat = (${p.macros.carb} x ${formatNum(ket)}) : 4\nKarbohidrat = ${formatNum(p.macros.carb * ket)} : 4\nKarbohidrat = <span class="font-bold ${p.colorClass}">${formatNum(carb_g)} g</span>`;
-                const prot_calc_string = `Protein = (${p.macros.protein * 100}% x KET) : 4\nProtein = (${p.macros.protein} x ${formatNum(ket)}) : 4\nProtein = ${formatNum(p.macros.protein * ket)} : 4\nProtein = <span class="font-bold ${p.colorClass}">${formatNum(prot_g)} g</span>`;
-                const fat_calc_string = `Lemak = (${p.macros.fat * 100}% x KET) : 9\nLemak = (${p.macros.fat} x ${formatNum(ket)}) : 9\nLemak = ${formatNum(p.macros.fat * ket)} : 9\nLemak = <span class="font-bold ${p.colorClass}">${formatNum(fat_g)} g</span>`;
+                const carb_calc_string = `Karbohidrat = (${formatNum(p.macros.carb * 100)}% x KET) : 4\nKarbohidrat = (${formatNum(p.macros.carb)} x ${formatNum(ket)}) : 4\nKarbohidrat = ${formatNum(p.macros.carb * ket)} : 4\nKarbohidrat = <span class="font-bold ${p.colorClass}">${formatNum(carb_g)} g</span>`;
+                const prot_calc_string = `Protein = (${formatNum(p.macros.protein * 100)}% x KET) : 4\nProtein = (${formatNum(p.macros.protein)} x ${formatNum(ket)}) : 4\nProtein = ${formatNum(p.macros.protein * ket)} : 4\nProtein = <span class="font-bold ${p.colorClass}">${formatNum(prot_g)} g</span>`;
+                const fat_calc_string = `Lemak = (${formatNum(p.macros.fat * 100)}% x KET) : 9\nLemak = (${formatNum(p.macros.fat)} x ${formatNum(ket)}) : 9\nLemak = ${formatNum(p.macros.fat * ket)} : 9\nLemak = <span class="font-bold ${p.colorClass}">${formatNum(fat_g)} g</span>`;
 
                 // Batas Adekuat
                 const carb_min = carb_g - (0.10 * carb_g);
@@ -383,8 +418,8 @@
                             <div class="calc-step">${keb_calc_string_func(p.colorClass)}</div>
                         </div>
                         <div class="mb-4 space-y-1">
-                            <p class="font-medium text-gray-700">Faktor Aktivitas (AF): <span class="${p.colorClass} font-bold">${p.af}</span></p>
-                            <p class="font-medium text-gray-700">Faktor Stres (IF): <span class="${p.colorClass} font-bold">${p.if}</span></p>
+                            <p class="font-medium text-gray-700">Faktor Aktivitas (AF): <span class="${p.colorClass} font-bold">${formatNum(p.af)}</span></p>
+                            <p class="font-medium text-gray-700">Faktor Stres (IF): <span class="${p.colorClass} font-bold">${formatNum(p.if)}</span></p>
                         </div>
                         <div class="mb-5">
                             <h3 class="text-lg font-semibold text-gray-800 mb-2">3. Kebutuhan Energi Total (KET)</h3>
@@ -393,21 +428,21 @@
                         <h3 class="text-lg font-semibold text-gray-800 mb-3">4. Kebutuhan Makronutrien</h3>
                         <div class="space-y-5">
                             <div>
-                                <h4 class="text-md font-semibold text-gray-700">a. Karbohidrat (${p.macros.carb * 100}%)</h4>
+                                <h4 class="text-md font-semibold text-gray-700">a. Karbohidrat (${formatNum(p.macros.carb * 100)}%)</h4>
                                 <h5 class="font-medium mt-2 mb-1 text-sm text-gray-600">Proses Perhitungan:</h5>
                                 <div class="calc-step">${carb_calc_string}</div>
                                 <h5 class="font-medium mt-3 mb-1 text-sm text-gray-600">Batas Adekuat:</h5>
                                 <div class="calc-step">${carb_ba_calc}</div>
                             </div>
                             <div>
-                                <h4 class="text-md font-semibold text-gray-700">b. Protein (${p.macros.protein * 100}%)</h4>
+                                <h4 class="text-md font-semibold text-gray-700">b. Protein (${formatNum(p.macros.protein * 100)}%)</h4>
                                 <h5 class="font-medium mt-2 mb-1 text-sm text-gray-600">Proses Perhitungan:</h5>
                                 <div class="calc-step">${prot_calc_string}</div>
                                 <h5 class="font-medium mt-3 mb-1 text-sm text-gray-600">Batas Adekuat:</h5>
                                 <div class="calc-step">${prot_ba_calc}</div>
                             </div>
                             <div>
-                                <h4 class="text-md font-semibold text-gray-700">c. Lemak (${p.macros.fat * 100}%)</h4>
+                                <h4 class="text-md font-semibold text-gray-700">c. Lemak (${formatNum(p.macros.fat * 100)}%)</h4>
                                 <h5 class="font-medium mt-2 mb-1 text-sm text-gray-600">Proses Perhitungan:</h5>
                                 <div class="calc-step">${fat_calc_string}</div>
                                 <h5 class="font-medium mt-3 mb-1 text-sm text-gray-600">Batas Adekuat:</h5>
@@ -421,7 +456,7 @@
             // 5. Tampilkan Hasil
             document.getElementById('practicum-results').innerHTML = practicumHtml;
             
-            // 6. [BARU] Pindah Halaman
+            // 6. Pindah Halaman
             pageInput.classList.add('hidden');
             pageResults.classList.remove('hidden');
             resultsHeader.classList.remove('hidden');
@@ -429,12 +464,12 @@
             // 7. Panggil fungsi setupScrollspy setelah HTML di-render
             setupScrollspy();
 
-            // 8. [BARU] Scroll ke atas halaman baru
+            // 8. Scroll ke atas halaman baru
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
 
 
-        // --- [BARU] Logika Modal dan Tombol Kembali ---
+        // --- Logika Modal dan Tombol Kembali ---
 
         // Tampilkan modal saat tombol "Kembali" diklik
         backButton.addEventListener('click', () => {
@@ -463,6 +498,12 @@
 
             // 5. Hapus hasil perhitungan (opsional, tapi baik untuk kebersihan)
             document.getElementById('practicum-results').innerHTML = '';
+            // [BARU] Reset juga ringkasan data pasien
+            document.getElementById('summary-umur').textContent = '- Tahun';
+            document.getElementById('summary-gender').textContent = '-';
+            document.getElementById('summary-bb').textContent = '- kg';
+            document.getElementById('summary-tb').textContent = '- cm';
+
 
             // 6. Reset scrollspy observer
             if (observer) {
@@ -474,4 +515,5 @@
     </script>
 </body>
 </html>
+
 
